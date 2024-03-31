@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>List of Outlets</title>
+</head>
+<body>
+  <h1>List of Outlets</h1>
+  <ul>
+    {% for outlet in outlets %}
+      <li>
+        <h2>{{ outlet.store_name }}</h2>
+        <p>{{ outlet.address }}</p>
+        {% if outlet.latitude %}
+          <p>Latitude: {{ outlet.latitude }}</p>
+          <p>Longitude: {{ outlet.longitude }}</p>
+        {% else %}
+          <p>Geocoding failed for this outlet.</p>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+</body>
+</html>
