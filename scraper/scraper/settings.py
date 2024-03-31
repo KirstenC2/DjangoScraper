@@ -16,6 +16,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+GOOGLE_MAPS_API_KEY = "AIzaSyAMwAGqvEfDYuyGKttune6WJQuX9hXfDb8"
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 

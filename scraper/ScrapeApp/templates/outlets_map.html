@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualize Outlets</title>
+    <!-- Include Google Maps API script with API key from settings -->
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}"></script>
+    <style>
+        /* CSS styles for map container */
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Search box -->
+    <form id="searchForm" method="GET">
+        <label for="query">Search: </label>
+        <input type="text" id="query" name="query">
+        <button type="button" onclick="searchOutlets()">Search</button>
+    </form>
+
+    <!-- Search result message -->
+    <div id="searchResult"></div>
+    
+    <!-- Map container -->
+    <div id="map"></div>
+    <form method="GET" action="{% url 'outlets_map' %}">
+        <label for="outlets">Choose Outlets:</label>
+        <select name="outlets" id="outlets">
+            {% for outlet in outlets %}
+                <option value="{{ outlet.id }}">{{ outlet.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+    <h2>Store List</h2>
+    <table id="storeTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Waze link</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for store in outlets %}
+            <tr>
+                <td>{{ store.name }}</td>   
+                <td>{{ store.address }}</td>
+                <td>{{ store.latitude }}</td>
+                <td>{{ store.longitude }}</td>
+                <td><a href="{{ store.waze }}">Go to waze</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10, // Set initial zoom level
+                center: {lat: 3.139, lng: 101.686}, // Set initial center coordinates
+            });
+
+            // Add markers and catchment area for each outlet
+            var outlets = {{ outlets|safe }};
+            for (var i = 0; i < outlets.length; i++) {
+                var outlet = outlets[i];
+    
+                // Add marker for the outlet
+                var marker = new google.maps.Marker({
+                    position: {lat: parseFloat(outlet.latitude), lng: parseFloat(outlet.longitude)},
+                    map: map,
+                    title: outlet.name
+                });
+    
+                // Add catchment area polygon
+                var catchmentPath = [];
+                for (var j = 0; j < outlet.catchment.length; j++) {
+                    var point = outlet.catchment[j];
+                    catchmentPath.push({lat: parseFloat(point[0]), lng: parseFloat(point[1])});
+                }
+    
+                var catchmentPolygon = new google.maps.Polygon({
+                    paths: catchmentPath,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: '#FF0000',
+                    fillOpacity: 0.35,
+                    map: map
+                });
+            }
+        }
+
+        // Function to perform AJAX request to search outlets
+        function searchOutlets() {
+            var query = document.getElementById('query').value;
+
+            // Perform AJAX request to search outlets
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/search_outlets/?query=' + query);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    updateSearchResult(response.response);
+                } else {
+                    updateSearchResult('Error: ' + xhr.status);
+                }
+            };
+            xhr.send();
+        }
+
+        // Function to update the search result message
+        function updateSearchResult(message) {
+            document.getElementById('searchResult').innerHTML = message;
+        }
+    </script>
+    <!-- Call the initMap function when the page loads -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"></script>
+</body>
+</html>
