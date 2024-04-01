@@ -71,7 +71,9 @@ includes all the required library
 - Configure the instance
 - Public IP address : 13.230.7.221
 - Setup Inboud Rules for connection port 8000
-- Get into the Server, clone from git, install all the required packages
+- Get into the Server
+- Clone from git 
+- install all the required packages
 - Run the server to serve the Django project 
 - Connect through the link (http://13.230.7.221:8000/outlets_map/)
 this will show the page with scraped data, and other fuunctionality
