@@ -25,7 +25,7 @@ GOOGLE_MAPS_API_KEY = "AIzaSyAMwAGqvEfDYuyGKttune6WJQuX9hXfDb8"
 SECRET_KEY = 'django-insecure-24&-=o5zjk@hx%%18zvi^w*ulh&k#a@)og)&w!m=w&optz)_xd'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['13.230.7.221']
 
