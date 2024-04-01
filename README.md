@@ -75,5 +75,6 @@ includes all the required library
 - Clone from git 
 - install all the required packages
 - Run the server to serve the Django project 
-- Connect through the link (http://13.230.7.221:8000/outlets_map/)
+- Connect through the link (http://13.230.7.221:8000/)
+
 this will show the page with scraped data, and other fuunctionality
